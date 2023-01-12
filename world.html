@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+            overflow-y: hidden;
+            width: 100vh;
+            height: 100vh;
+            position: relative;
+        }
+        .main{
+            position: absolute;
+            /* text-align: center; */
+            width: 100vh;
+            left: 370px;
+            top: 30%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+        }
+        h1{
+           font-size: 3rem;
+           text-transform: uppercase;
+        }
+
+    </style>
+    
+</head>
+<body>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three-orbitcontrols@2.110.3/OrbitControls.js"></script>
+    <script type="module" >
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
+        // import * as dat from 'dat.gui';
+        // import stars from 'stars.jpg'; 
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        document.body.append(renderer.domElement);
+        const scene=new THREE.Scene();
+        const camera=new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth/window.innerHeight,
+            0.1,
+            1000
+        );
+        const orbit= new OrbitControls(camera,renderer.domElement);
+        
+        camera.position.set(-10,30,30);
+        orbit.update();
+
+        scene.fog=new THREE.FogExp2(0xFFFFFF,0.01);
+
+        renderer.setClearColor(0xFFEA00);
+
+        const loader = new THREE.TextureLoader();
+        loader.load('https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg' , function(texture)
+            {
+             scene.background = texture;  
+            });
+
+        scene.background = new THREE.CubeTextureLoader().load( [
+		'https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg',
+		'https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg',
+		'https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg',
+		'https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg',
+		'https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg',
+		'https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg'
+	] );
+
+        // const textureLoader=new THREE.TextureLoader();
+        // scene.background=textureLoader.load(stars);
+        
+        const sphere2Geometry=new THREE.SphereGeometry(0,50,50);
+        const sphere2Material=new THREE.MeshBasicMaterial({
+            color: 0xFFFFFF,
+            // wireframe:true,
+        });
+        const sphere2=new THREE.Mesh(sphere2Geometry,sphere2Material);
+        scene.add(sphere2);
+
+
+        const boxGeometry=new THREE.BoxGeometry(3,3,3,3);
+        const boxMaterial=new THREE.MeshBasicMaterial({color: 0x00FF00});
+        const box=new THREE.Mesh(boxGeometry,boxMaterial);
+        scene.add(box);
+
+        const sphereGeometry=new THREE.SphereGeometry(5,50,50);
+        const sphereMaterial=new THREE.MeshBasicMaterial({
+            color: 0x0000FF,
+            wireframe:true,
+        });
+        const sphere=new THREE.Mesh(sphereGeometry,sphereMaterial);
+        // sphere.position.set(-10,10,0)
+        scene.add(sphere);
+
+        //-----------gui-----------------
+
+        // const gui =new dat.GUI();
+        // const option={
+        //     sphereColor: '#ffea00'
+        // };
+        // gui.addColor(option,'sphereColor').onChange(function(e){
+        //     sphere.material.color.set(e);
+        // })
+
+
+        //----------light-----------------------
+
+        // const spotLight=new THREE.SpotLight(0xFFFFFF);
+        // scene.add(spotLight);
+        // spotLight.position.set(-100,100,0);
+        // spotLight.angle=0.2;
+        
+        // const sLightHelper=new THREE.SpotLightHelper(spotLight);
+        // scene.add(sLightHelper);
+        // const ambientLight=new THREE.AmbientLight(0x333333);
+        // scene.add(ambientLight);
+        
+
+        // const directionalLight=new THREE.DirectionalLight(0xFFFFFF,0.8);
+        // scene.add(directionalLight);
+        // directionalLight.position.set(-30,50,0);
+
+        // const dLightHelper=new THREE.DirectionalLightHelper(directionalLight,5);
+        // scene.add(dLightHelper);
+
+
+
+
+
+
+
+
+        let step=0;
+        function animate(time){
+            box.rotation.x =time/1000;
+            box.rotation.y =time/1000;
+
+            step+=0.0001;
+            sphere.rotation.y=10*Math.abs(Math.sin(step));
+
+            renderer.render(scene,camera);
+        }
+        renderer.setAnimationLoop(animate);
+    </script>
+    <div class="main">
+        <h1 >hello world</h1>
+        <!-- <h2>thanks youtube</h2> -->
+    </div>
+    
+</body>
+</html>
